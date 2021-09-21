@@ -9,7 +9,7 @@ const contestSchema = new mongoose.Schema({
     date: {
         type: String
     },
-    participants: {
+    participants: [{
         name: {
             type: String,
             required: true
@@ -23,7 +23,7 @@ const contestSchema = new mongoose.Schema({
             type: Number,
             required: true
         }
-    }
+    }]
 });
 
 const Contest = mongoose.model("Contest", contestSchema);
