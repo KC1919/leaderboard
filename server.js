@@ -3,7 +3,10 @@ const app = express();
 const db = require("./db");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
-const jwt = require("jsonwebtoken");
+
+app.use(express.static("public"));
+
+app.set('view engine', 'ejs');
 
 app.use(cookieParser());
 
@@ -11,9 +14,11 @@ app.use(express.json());
 
 const authRouter = require("./routes/auth");
 const contestRouter = require("./routes/contest");
+const crudRouter = require("./routes/crud");
 
 app.use("/api/auth", authRouter);
 app.use("/api/contest", contestRouter);
+app.use("/api/contest/crud", crudRouter);
 
 
 

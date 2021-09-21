@@ -4,6 +4,7 @@ const authRouter = express.Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const verify = require("../middlewares/verify");
+const mongoose=require("mongoose");
 authRouter.post("/login", login).post("/register", register).get("/protected", verify, protected);
 
 async function login(req, res) {
@@ -82,7 +83,9 @@ async function register(req, res) {
 
 function protected(req, res) {
     console.log("reached protected");
-    return res.status(200).json({message:"Reached protected"});
+    return res.status(200).json({
+        message: "Reached protected"
+    });
 }
 
 

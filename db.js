@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+const Contest=require("./models/Contest");
+const User=require("./models/User");
+
 const DB_URL = 'mongodb://localhost:27017/contestDB';
 
 async function connect() {

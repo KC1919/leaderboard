@@ -1,12 +1,12 @@
-const mongoose = require("mongoose");
 const verify = require("../middlewares/verify");
 const express = require("express");
 const Contest = require("../models/Contest");
+const mongoose=require("mongoose");
 
 
 const contestRouter = express.Router();
 
-contestRouter.post("/create", createContest).post("/addParticipant", addParticipant);
+contestRouter.post("/create", createContest).post("/addParticipant", addParticipant).get("/contests", getContests);
 
 
 //function to create a new contest
@@ -17,9 +17,10 @@ async function createContest(req, res) {
 
         //creating the contest
         const contest = await Contest.create({
-            name: name,
-            date: date,
+            name: req.body.name,
+            date: req.body.date
         });
+        // console.log("below");
         if (contest) {
             //if the contest got created successfully
             contest.save(); //we save the contest in the database
@@ -52,7 +53,7 @@ async function addParticipant(req, res) {
         if (contest) {
             //if the contest is already present in the database
             const participants = req.body.participants; //we get the participants list
-            
+
             //we add all the participants to the participants array of that particular contest
             const result = await Contest.updateMany({
                 name: contest.name
@@ -60,7 +61,9 @@ async function addParticipant(req, res) {
                 $push: {
                     participants: {
                         $each: participants,
-                        sort: 1
+                        $sort: {
+                            score: -1
+                        }
                     }
                 }
             });
@@ -75,8 +78,8 @@ async function addParticipant(req, res) {
                     message: "failed to add participants"
                 });
             }
-        } 
-        
+        }
+
         //and if the contest is not present in the database
         else {
             // console.log("Contest not found!");
@@ -91,7 +94,7 @@ async function addParticipant(req, res) {
             });
 
             if (contest) {
-                contest.save();//then save the contest in the database
+                contest.save(); //then save the contest in the database
 
                 const participants = req.body.participants; //we get the participants list
 
@@ -113,8 +116,7 @@ async function addParticipant(req, res) {
                     return res.status(200).json({
                         message: "Contest created and participants added successfully"
                     })
-                } 
-                else {
+                } else {
                     return res.status(400).json({
                         message: "failed to add participants"
                     });
@@ -125,12 +127,34 @@ async function addParticipant(req, res) {
                 });
             }
         }
-        
+
     } catch (error) {
         return res.status(500).json({
             message: "failed to add participants, internal server error",
             error: error
         })
+    }
+}
+
+async function getContests(req, res) {
+    try {
+        const contests = await Contest.find({}, {
+            _id: 0,
+            name: 1
+        });
+        if (contests.length > 0) {
+            return res.status(200).json({
+                message: "Contests fetched successfully",contests:contests
+            });
+        } else {
+            return res.status(400).json({
+                message: "Contests cannot be fetched"
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: "Contests cannot be fetched, internal server error"
+        });
     }
 }
 
