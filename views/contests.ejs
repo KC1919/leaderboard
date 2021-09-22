@@ -1,33 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contests Page</title>
-    <!-- CSS only -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
-      crossorigin="anonymous"
-    ></script>
-  </head>
-  <body>
-    <!-- JavaScript Bundle with Popper -->
 
-    <div class="wrapper">
-      <div class="one">One</div>
-      <div class="two">Two</div>
-      <div class="three">Three</div>
-      <div class="four">Four</div>
-      <div class="five">Five</div>
-      <div class="six">Six</div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contests Page</title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
+
+    <!-- Axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <!-- JavaScript Bundle with Popper -->
+
+  <div" class="container">
+    <div style="background-color:brown" class="text-center my-3">
+      <h1>Contests</h1>
     </div>
-  </body>
+    <!-- onMouseOver="this.style.cursor='pointer';this.style.transform='scale(1.1)';" -->
+    <% contests.forEach((contest)=>{%>
+      <div 
+        onmouseout="this.style.transform='scale(1)';" style="background-color: aquamarine;"
+        class="text-center my-2 contest-name">
+        <div style="display: flex;justify-content:space-evenly;">
+          <a href="/api/contest/crud/<%=contest.name%>/participants">
+            <h5>
+              <%=contest.name%>
+            </h5>
+          </a>
+          <h5><%=contest.date%></h5>
+        </div>
+        
+      </div>
+      <%})%>
+        </div>
+
+        <!-- <script>
+          const contests = document.querySelectorAll(".contest-name");
+
+          contests.forEach(element => {
+            element.addEventListener("click",async (event) => {
+             let result=await axios.get(`/api/contest/crud/${event.target.innerText}/participants`);
+             console.log(result);
+            })
+          });
+
+        </script> -->
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+          crossorigin="anonymous"></script>
+</body>
+
 </html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Participant</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
+
+    <!-- Axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body style="text-align: center">
+    <div class="text-center my-2">
+        <h1>
+            <%=contest%>-Add Participant
+        </h1>
+    </div>
+    <div class="my-3"><button onclick="addField(this)">Add Field</button></div>
+    <div class="text-center my-3">
+        <form id="partiform" onsubmit="event.preventDefault(); getinfo(this);">
+            <div id="field-container">
+                <div class="my-2">
+                    <label for="name">Name: </label><input id="fullname" type="text" />
+                    <label for="email">Email: </label><input id="" type="email" />
+                    <label for="score">Points: </label><input id="" type="number" />
+                </div>
+            </div>
+
+            <button type="submit" class="my-3">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        async function getinfo(event) {
+            let name = document.getElementById("partiform").getElementsByTagName('input');
+            
+            const data=[];
+
+            for(let i=0;i<name.length;i+3)
+            {
+                data.push({
+                    name:name[i].value,
+                    email:name[i+1].value,
+                    score:name[i+2].value
+                })
+            }
+
+            console.log(data);
+            
+
+            // const response = await axios({
+            //     method: "post",
+            //     url: `/api/contest/crud/<%=contest%>/addParticipants`,
+            //     headers: { "Content-Type": "application/json" },
+            //     data: {
+            //         name: name,
+            //     },
+            // });
+        }
+
+
+        async function addField(event) {
+            let form = document.getElementById("field-container");
+
+            var div = document.createElement("div");
+            div.classList.add("my-2")
+            let field = `
+                <label for="name">Name: </label><input id="fullname" type="text" />
+                <label for="email">Email: </label><input id="" type="email" />
+                <label for="score">Points: </label><input id="" type="number" />`
+            div.innerHTML = field;
+            form.appendChild(div);
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

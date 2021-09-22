@@ -2,11 +2,12 @@ const express = require("express");
 const app = express();
 const db = require("./db");
 const cookieParser = require("cookie-parser");
+const ejs=require("ejs");
 require("dotenv").config();
 
 app.use(express.static("public"));
 
-app.set('view engine', 'ejs');
+app.set('view engine','ejs');
 
 app.use(cookieParser());
 

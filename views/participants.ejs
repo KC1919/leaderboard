@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Participants</title>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
+
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div style="display: flex; justify-content: center" class="text-center my-2 mb-5">
+      <div>
+        <h1>
+          <%=contest%> Participants
+        </h1>
+      </div>
+
+      <div>
+        <a href="/api/contest/crud/<%=contest%>/addParticipant"><button
+            style="position: relative; left: 150px; top: 12px" class="btn btn-primary">
+            Add Participant
+          </button></a>
+
+      </div>
+    </div>
+    <div class="my-3" style="
+          background-color: lightblue;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+        ">
+      <div>Name</div>
+      <div>Email</div>
+      <div>Points</div>
+    </div>
+    <%participants.forEach((participant)=>{%>
+      <div class="my-1" style="
+          background-color: lightyellow;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+        ">
+        <div>
+          <%=participant.name%>
+        </div>
+        <div>
+          <%=participant.email%>
+        </div>
+        <div>
+          <%=participant.score%>
+        </div>
+        <div style="position: relative; left: 110px">
+          <button id="<%=participant.email%>" onclick="deleteParti(this)" class="btn btn-primary">
+            Delete
+          </button>
+        </div>
+      </div>
+      <%})%>
+  </div>
+
+  <script>
+    async function deleteParti(event) {
+      console.log(event.id);
+      // console.log(`<%=contest%>`);
+
+      try {
+        const response = await axios({
+          method: "post",
+          url: `/api/contest/crud/<%=contest%>/participants/delete`,
+          headers: { "Content-Type": "application/json" },
+          data: {
+            contest: `<%=contest%>`,
+            email: `${event.id}`,
+          },
+        });
+        if (response) {
+          alert("Participant deleted successfully");
+          location.reload(true);
+        }
+      } catch (error) {
+        alert("Participant not deleted,internal server error");
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
