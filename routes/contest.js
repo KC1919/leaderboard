@@ -4,11 +4,12 @@ const Contest = require("../models/Contest");
 const mongoose = require("mongoose");
 const ejs = require('ejs');
 const Cumulative = require("../models/cumulative");
+const axios=require("axios");
 
 
 const contestRouter = express.Router();
 
-contestRouter.post("/create", createContest).get("/allContests", getContests).get("/cumulative", cumulative);
+contestRouter.post("/create", createContest).get("/allContests", getContests).get("/participants", getParticipants);
 
 
 //function to create a new contest
@@ -70,22 +71,24 @@ async function getContests(req, res) {
     }
 }
 
-
-async function cumulative(req, res) {
+//function to display all the participants on the leaderboard in descsending order of their score
+async function getParticipants(req, res) {
 
     try {
-        const cumScore = await Cumulative.find({}, {
+        const participants = await Cumulative.find({}, {
             _id: 0
         }).sort({
             score: -1
         });
 
-        if (cumScore !== null) {
-            console.log(cumScore);
-            return res.status(200).json({
-                message: "Cumulative scores fetched!",
-                result: cumScore
-            });
+        if (participants !== null) {
+            console.log(participants);
+            // return res.status(200).json({
+            //     message: "Cumulative scores fetched!",
+            //     result: participants
+            // });
+
+            res.render("leaderboard",{participants:participants});
         } else {
             return res.status(400).json({
                 message: "Error fetching cumulative score!"
@@ -100,14 +103,15 @@ async function cumulative(req, res) {
     }
 }
 
-contestRouter.post("/addCumulative", addCumulative);
+contestRouter.get("/addParticipant", addParticipant).post("/updateCumulative", updateCumulative);
 
-async function addCumulative(req, res) {
+//function to add participants to the cumulative leaderboard list
+async function updateCumulative(req, res) {
 
     try {
         const data = req.body;
 
-        data.forEach(async (participant) => {
+        await data.forEach(async (participant) => {
             const present = await Cumulative.findOne({
                 email: participant.email
             }, {
@@ -116,7 +120,7 @@ async function addCumulative(req, res) {
 
             if (present !== null) {
                 const prevScore = present.score;
-                const newScore = await (prevScore + participant.score);
+                const newScore = await (prevScore + parseInt(participant.score));
                 const update = await Cumulative.updateOne({
                     email: present.email
                 }, {
@@ -138,13 +142,39 @@ async function addCumulative(req, res) {
                     console.log("Error saving the score of new Participant");
                 }
             }
+
         });
+        
     } catch (error) {
         console.log("Internal server error", error);
         return res.status(500).json({
             message: "Error updating cumulative scores,internal server error",
             error: error
         });
+    }
+}
+
+//function to render the page where participants can be added
+async function addParticipant(req, res) {
+    res.render("cumulativeAdd");
+}
+
+contestRouter.post("/participants/delete",deleteParticipant);
+
+//function to delete a participant from the leaderboard
+async function deleteParticipant(req,res) {
+    
+    try {
+        console.log(req.body.email);
+        const result=await Cumulative.findOneAndDelete({email:req.body.email});
+        if(result!=null){
+            console.log("Participant deleted successfully!");
+            return res.status(200).json({message:"Deleted successfully"});
+        }else{
+            console.log("Failed to delete partcipant");
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 

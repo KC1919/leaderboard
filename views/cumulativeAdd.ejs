@@ -56,13 +56,13 @@
 
                 const response = await axios({
                     method: "post",
-                    url: `/api/contest/addCumulative`,
+                    url: `/api/contest/updateCumulative`,
                     headers: { "Content-Type": "application/json" },
                     data: data,
                 });
 
                 if (response) {
-                    console.log("Participants added successfully", response);
+                    console.log("Participants added successfully", response.message);
                 }
 
             } catch (error) {
