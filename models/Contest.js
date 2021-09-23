@@ -26,7 +26,7 @@ const contestSchema = new mongoose.Schema({
     }]
 });
 
-const Contest =mongoose.model("Contest", contestSchema);
+const Contest=mongoose.model("Contest", contestSchema);
 
 
 module.exports = Contest;

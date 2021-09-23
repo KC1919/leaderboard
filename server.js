@@ -23,6 +23,7 @@ app.use("/api/contest/crud", crudRouter);
 
 
 
+
 app.listen(3000, () => {
     console.log("Server started");
     db();

@@ -84,43 +84,43 @@ async function addParticipant(req, res) {
 
     try {
         
-        console.log("hello");
+        // console.log("hello");
         console.log(req.params.contestName);
-        console.log(req.body.name);
+        console.log(req.body);
         //we check if the contest is present in the database or not
-        // const contest = await Contest.findOne({
-        //     name: req.body.params
-        // });
+        const contest = await Contest.findOne({
+            name: req.params.contestName
+        });
 
-        // if (contest) {
-        //     //if the contest is already present in the database
-        //     const participants = req.body.participants; //we get the participants list
+        if (contest) {
+            //if the contest is already present in the database
+            const participants = req.body; //we get the participants list
 
-        //     //we add all the participants to the participants array of that particular contest
-        //     const result = await Contest.updateMany({
-        //         name: contest.name
-        //     }, {
-        //         $push: {
-        //             participants: {
-        //                 $each: participants,
-        //                 $sort: {
-        //                     score: -1
-        //                 }
-        //             }
-        //         }
-        //     });
-        //     //if the participants get added successfully
-        //     if (result) {
-        //         console.log("Participants added successfully");
-        //         return res.status(200).json({
-        //             message: "participants added successfully"
-        //         });
-        //     } else {
-        //         return res.status(400).json({
-        //             message: "failed to add participants"
-        //         });
-        //     }
-        // }
+            //we add all the participants to the participants array of that particular contest
+            const result = await Contest.updateMany({
+                name: contest.name
+            }, {
+                $push: {
+                    participants: {
+                        $each: participants,
+                        $sort: {
+                            score: -1
+                        }
+                    }
+                }
+            });
+            //if the participants get added successfully
+            if (result) {
+                console.log("Participants added successfully");
+                return res.status(200).json({
+                    message: "participants added successfully"
+                });
+            } else {
+                return res.status(400).json({
+                    message: "failed to add participants"
+                });
+            }
+        }
 
         //and if the contest is not present in the database
         // else {
