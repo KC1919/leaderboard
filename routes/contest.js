@@ -83,12 +83,10 @@ async function getParticipants(req, res) {
 
         if (participants !== null) {
             console.log(participants);
-            // return res.status(200).json({
-            //     message: "Cumulative scores fetched!",
-            //     result: participants
-            // });
 
-            res.render("leaderboard",{participants:participants});
+            // res.send("hello");
+
+            res.render("leaderboard.ejs",{participants:participants});
         } else {
             return res.status(400).json({
                 message: "Error fetching cumulative score!"
@@ -103,7 +101,7 @@ async function getParticipants(req, res) {
     }
 }
 
-contestRouter.get("/addParticipant", addParticipant).post("/updateCumulative", updateCumulative);
+contestRouter.get("/addParticipant",verify, addParticipant).post("/updateCumulative",verify, updateCumulative);
 
 //function to add participants to the cumulative leaderboard list
 async function updateCumulative(req, res) {
@@ -159,7 +157,7 @@ async function addParticipant(req, res) {
     res.render("cumulativeAdd");
 }
 
-contestRouter.post("/participants/delete",deleteParticipant);
+contestRouter.post("/participants/delete",verify,deleteParticipant);
 
 //function to delete a participant from the leaderboard
 async function deleteParticipant(req,res) {

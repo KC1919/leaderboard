@@ -1,19 +1,25 @@
 const express = require("express");
+const app=express();
 const jwt = require("jsonwebtoken");
 const authRouter = express.Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const verify = require("../middlewares/verify");
-const mongoose=require("mongoose");
+
+
+app.use(express.json());
 authRouter.post("/login", login).post("/register", register).get("/protected", verify, protected);
 
 async function login(req, res) {
 
     try {
+
         const {
             email,
             password
         } = req.body;
+
+        // console.log(req.body.email,req.body.password);
 
         const user = await User.findOne({
             email: email
@@ -28,9 +34,11 @@ async function login(req, res) {
                     httpOnly: true,
                     maxAge: 90000
                 });
-                return res.status(200).json({
-                    message: "User authenticated"
-                });
+                // return res.status(200).json({
+                //     message: "User authenticated"
+                // });
+
+                res.redirect("/contest/participants");
             } else {
                 return res.status(200).json({
                     message: "Invalid email or password"
