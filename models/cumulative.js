@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 
+const time=()=>{
+    let date=new Date();
+    date.toString('YYYY-MM-dd');
+}
+
 const cumulativeSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -13,7 +18,7 @@ const cumulativeSchema = new mongoose.Schema({
         type: Number,
         required: true
     }
-});
+},{timestamps:true});
 
 const Cumulative = mongoose.model("Cumulative", cumulativeSchema);
 
