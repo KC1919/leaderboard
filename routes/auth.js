@@ -8,12 +8,12 @@ const verify = require("../middlewares/verify");
 
 
 app.use(express.json());
+
 authRouter.post("/login", login).post("/register", register).get("/protected", verify, protected);
 
 async function login(req, res) {
 
     try {
-
         const {
             email,
             password
@@ -32,12 +32,12 @@ async function login(req, res) {
                 const token = jwt.sign("secret", process.env.JWT_KEY);
                 res.cookie("secret", token, {
                     httpOnly: true,
-                    maxAge: 90000
+                    maxAge: 86400
                 });
                 // return res.status(200).json({
                 //     message: "User authenticated"
                 // });
-
+                // return res.send({data:"hello"});
                 res.redirect("/contest/participants");
             } else {
                 return res.status(200).json({

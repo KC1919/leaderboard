@@ -83,10 +83,7 @@ async function getParticipants(req, res) {
 
         if (participants !== null) {
             console.log(participants);
-
-            // res.send("hello");
-
-            res.render("leaderboard.ejs",{participants:participants});
+           res.render("leaderboard.ejs",{participants:participants});
         } else {
             return res.status(400).json({
                 message: "Error fetching cumulative score!"
@@ -101,25 +98,29 @@ async function getParticipants(req, res) {
     }
 }
 
-contestRouter.get("/addParticipant",verify, addParticipant).post("/updateCumulative",verify, updateCumulative);
+contestRouter.get("/addParticipant", addParticipant).post("/updateCumulative", updateCumulative);
 
 //function to add participants to the cumulative leaderboard list
 async function updateCumulative(req, res) {
 
     try {
         const data = req.body;
-
+		
+		//looping through all the participants to be added to the participants list
         await data.forEach(async (participant) => {
+			
+			//finding if the participant already exist in the database
             const present = await Cumulative.findOne({
                 email: participant.email
             }, {
                 _id: 0
             });
-
+			
+			//if the participant exists
             if (present !== null) {
-                const prevScore = present.score;
-                const newScore = await (prevScore + parseInt(participant.score));
-                const update = await Cumulative.updateOne({
+                const prevScore = present.score;   //we take his previous score stored in the database
+                const newScore = await (prevScore + parseInt(participant.score));   //sum the previous score witht the current obtained score
+                const update = await Cumulative.updateOne({    //and update the score with the new score formed by summing up thte prev and current
                     email: present.email
                 }, {
                     score: newScore,
@@ -130,8 +131,8 @@ async function updateCumulative(req, res) {
                 } else {
                     console.log("Problem updating score!");
                 }
-            } else {
-                const newParticipant = await Cumulative.create(participant);
+            } else {  //if the participant is not present in the database, means this is the first time participant has participated in the contest
+                const newParticipant = await Cumulative.create(participant);  //so we create a new participant, with the obtained score
 
                 if (newParticipant) {
                     newParticipant.save();
@@ -157,7 +158,7 @@ async function addParticipant(req, res) {
     res.render("cumulativeAdd");
 }
 
-contestRouter.post("/participants/delete",verify,deleteParticipant);
+contestRouter.post("/participants/delete",deleteParticipant);
 
 //function to delete a participant from the leaderboard
 async function deleteParticipant(req,res) {
