@@ -148,9 +148,7 @@ async function updateCumulative(req, res) {
                 }
             }
         });
-        if(count===data.length){
-            res.redirect("/participants");
-        }
+        return res.json("Participants added successfully!");
         
     } catch (error) {
         console.log("Internal server error", error);
