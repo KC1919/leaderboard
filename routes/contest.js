@@ -130,7 +130,7 @@ async function updateCumulative(req, res) {
 
                 if (update !== null) {
                     console.log("Score updated successfully");
-                    return res.json("Scores updated successfully");
+                    // return res.json("Scores updated successfully");
                 } else {
                     console.log("Problem updating score!");
                 }
@@ -140,13 +140,12 @@ async function updateCumulative(req, res) {
                     await newParticipant.save();
                     console.log("New participant scores updated successfully!");
                     // return res.json("New Participant added successfully");
-                    res.redirect("/participants")
                 } else {
                     console.log("Error saving the score of new Participant");
                 }
             }
-
         });
+        res.redirect("/participants");
         
     } catch (error) {
         console.log("Internal server error", error);
