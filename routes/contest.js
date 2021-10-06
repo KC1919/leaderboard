@@ -9,7 +9,7 @@ const axios=require("axios");
 
 const contestRouter = express.Router();
 
-contestRouter.post("/create", createContest).get("/allContests", getContests).get("/participants", getParticipants);
+contestRouter.post("/create", createContest).get("/allContests", getContests).get("/participants",verify, getParticipants);
 
 
 //function to create a new contest
@@ -82,7 +82,7 @@ async function getParticipants(req, res) {
         });
 
         if (participants !== null) {
-            console.log(participants);
+            // console.log(participants);
            res.render("leaderboard.ejs",{participants:participants});
         } else {
             return res.status(400).json({
@@ -98,20 +98,22 @@ async function getParticipants(req, res) {
     }
 }
 
-contestRouter.get("/addParticipant", addParticipant).post("/updateCumulative", updateCumulative);
+contestRouter.get("/addParticipant",verify, addParticipant).post("/updateCumulative",verify, updateCumulative);
 
 //function to add participants to the cumulative leaderboard list
 async function updateCumulative(req, res) {
 
     try {
         const data = req.body;
+
+        // console.log(req.body);
 		
 		//looping through all the participants to be added to the participants list
         await data.forEach(async (participant) => {
 			
 			//finding if the participant already exist in the database
             const present = await Cumulative.findOne({
-                email: participant.email
+                regNumber: participant.regNumber
             }, {
                 _id: 0
             });
@@ -121,22 +123,23 @@ async function updateCumulative(req, res) {
                 const prevScore = present.score;   //we take his previous score stored in the database
                 const newScore = await (prevScore + parseInt(participant.score));   //sum the previous score witht the current obtained score
                 const update = await Cumulative.updateOne({    //and update the score with the new score formed by summing up thte prev and current
-                    email: present.email
+                    regNumber: present.regNumber
                 }, {
                     score: newScore,
                 });
 
                 if (update !== null) {
                     console.log("Score updated successfully");
+                    return res.json("Scores updated successfully");
                 } else {
                     console.log("Problem updating score!");
                 }
             } else {  //if the participant is not present in the database, means this is the first time participant has participated in the contest
                 const newParticipant = await Cumulative.create(participant);  //so we create a new participant, with the obtained score
-
                 if (newParticipant) {
-                    newParticipant.save();
+                    await newParticipant.save();
                     console.log("New participant scores updated successfully!");
+                    return res.json("New Participant added successfully");
                 } else {
                     console.log("Error saving the score of new Participant");
                 }
@@ -164,8 +167,8 @@ contestRouter.post("/participants/delete",deleteParticipant);
 async function deleteParticipant(req,res) {
     
     try {
-        console.log(req.body.email);
-        const result=await Cumulative.findOneAndDelete({email:req.body.email});
+        // console.log(req.body.regNumber);
+        const result=await Cumulative.findOneAndDelete({regNumber:req.body.regNumber});
         if(result!=null){
             console.log("Participant deleted successfully!");
             return res.status(200).json({message:"Deleted successfully"});

@@ -15,7 +15,7 @@ const contestSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-        email: {
+        regNumber: {
             type: String,
             required: true,
         },

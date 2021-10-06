@@ -27,7 +27,7 @@
                 <div class="my-2">
                     <label class="mx-3" for="count">Participant-1</label>
                     <label for="name">Name: </label><input id="fullname" type="text" />
-                    <label for="email">Email: </label><input id="" type="email" />
+                    <label for="regNo">RegNo.: </label><input id="" type="text" />
                     <label for="score">Points: </label><input id="" type="number" />
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 for (let i = 0; i < name.length; i += 3) {
                     data.push({
                         name: name[i].value,
-                        email: name[i + 1].value,
+                        regNumber: name[i + 1].value,
                         score: name[i + 2].value
                     })
                 }
@@ -81,7 +81,7 @@
             let field = `
                 <label class="mx-3" for="count">Participant-${count}</label>
                 <label for="name">Name: </label><input id="fullname" type="text" />
-                <label for="email">Email: </label><input id="" type="email" />
+                <label for="regNo">regNumber: </label><input id="" type="text" />
                 <label for="score">Points: </label><input id="" type="number" />`
             div.innerHTML = field;
             form.appendChild(div);

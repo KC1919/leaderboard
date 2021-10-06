@@ -1,38 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Participant</title>
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
-
-    <!-- Axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-</head>
-
-<body style="text-align: center">
+<%- include('Navbar')-%>
     <div class="text-center my-2">
         <h1>
-        Add Participant
+            Add Participant
         </h1>
     </div>
-    <div class="my-3"><button onclick="addField(this)">Add Field</button></div>
     <div class="text-center my-3">
         <form id="partiform" onsubmit="event.preventDefault(); getinfo(this);">
             <div id="field-container">
                 <div class="my-2">
                     <label class="mx-3" for="count">Participant-1</label>
                     <label for="name">Name: </label><input id="fullname" type="text" />
-                    <label for="email">Email: </label><input id="" type="email" />
+                    <label for="regNumber">RegNo: </label><input id="" type="text" />
                     <label for="score">Points: </label><input id="" type="number" />
                 </div>
             </div>
-            <button type="submit" class="my-3">Submit</button>
+            
+            <button style="position: relative;left: 390px;" type="submit" class="btn btn-primary my-1" title="Click here to submit the list of participants">Submit</button>
         </form>
+        <div class="my-3">
+            <button class="btn btn-primary" onclick="addField(this)" title="Click here to add one more participant field" >Add Field</button>
+        </div>
     </div>
 
     <script>
@@ -40,31 +27,35 @@
         async function getinfo(event) {
 
             try {
-                let name = await document.getElementById("partiform").getElementsByTagName('input');
-
-                const data = [];
-
-                for (let i = 0; i < name.length; i += 3) {
-                    data.push({
-                        name: name[i].value,
-                        email: name[i + 1].value,
-                        score: name[i + 2].value
-                    })
-                }
-
-                console.log(data);
-
-                const response = await axios({
-                    method: "post",
-                    url: `/contest/updateCumulative`,
-                    headers: { "Content-Type": "application/json" },
-                    data: data,
-                });
+                const response = confirm("Are you sure you want to submit the list!");
 
                 if (response) {
-                    console.log("Participants added successfully", response.message);
-                }
+                    let name = await document.getElementById("partiform").getElementsByTagName('input');
 
+                    const data = [];
+
+                    for (let i = 0; i < name.length; i += 3) {
+                        data.push({
+                            name: name[i].value,
+                            regNumber: name[i + 1].value,
+                            score: name[i + 2].value
+                        })
+                    }
+
+                    alert("Adding...");
+                    const response = await axios({
+                        method: "post",
+                        url: `/contest/updateCumulative`,
+                        headers: { "Content-Type": "application/json" },
+                        data: data,
+                    });
+
+                    if (response.length !== 0) {
+                        console.log("Participants added successfully", response.message);
+                        await alert("Participants added Successfully!");
+                        location.reload(true);
+                    }
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -74,14 +65,14 @@
         async function addField(event) {
             let form = document.getElementById("field-container");
 
-            let count=form.childElementCount;
+            let count = form.childElementCount;
 
             var div = document.createElement("div");
             div.classList.add("my-2")
             let field = `
-                <label class="mx-3" for="count">Participant-${count}</label>
+                <label class="mx-3" for="count">Participant-${count + 1}</label>
                 <label for="name">Name: </label><input id="fullname" type="text" />
-                <label for="email">Email: </label><input id="" type="email" />
+                <label for="regNumber">RegNo: </label><input id="" type="text" />
                 <label for="score">Points: </label><input id="" type="number" />`
             div.innerHTML = field;
             form.appendChild(div);
@@ -91,6 +82,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
-</body>
+    </body>
 
-</html>
+    </html>

@@ -1,5 +1,5 @@
 const express = require("express");
-const app=express();
+const app = express();
 const jwt = require("jsonwebtoken");
 const authRouter = express.Router();
 const bcrypt = require("bcryptjs");
@@ -9,7 +9,7 @@ const verify = require("../middlewares/verify");
 
 app.use(express.json());
 
-authRouter.post("/login", login).post("/register", register).get("/protected", verify, protected);
+authRouter.post("/login", login).post("/register", register).get("/protected", verify, protected).get("/logout",verify,logout);
 
 async function login(req, res) {
 
@@ -19,8 +19,6 @@ async function login(req, res) {
             password
         } = req.body;
 
-        // console.log(req.body.email,req.body.password);
-
         const user = await User.findOne({
             email: email
         });
@@ -29,15 +27,11 @@ async function login(req, res) {
             const pass = await bcrypt.compare(password, user.password);
             if (user.email === email && pass) {
                 console.log("User authenticated");
-                const token = jwt.sign("secret", process.env.JWT_KEY);
-                res.cookie("secret", token, {
+                const authToken = jwt.sign({userId:user._id}, process.env.JWT_KEY);
+                await res.cookie("secret", authToken, {
                     httpOnly: true,
                     maxAge: 86400
                 });
-                // return res.status(200).json({
-                //     message: "User authenticated"
-                // });
-                // return res.send({data:"hello"});
                 res.redirect("/contest/participants");
             } else {
                 return res.status(200).json({
@@ -48,7 +42,7 @@ async function login(req, res) {
         } else {
             console.log("User not found");
             return res.status(401).json({
-                message: "User authentication failed!"
+                message: "User does not exists!"
             });
         }
     } catch (error) {
@@ -60,7 +54,7 @@ async function login(req, res) {
     }
 }
 
-
+// funtion to register a user
 async function register(req, res) {
 
     try {
@@ -68,6 +62,7 @@ async function register(req, res) {
             email,
             password
         } = req.body;
+
         const salt = await bcrypt.genSalt(10);
         const secPass = await bcrypt.hash(password, salt);
         const user = await User.create({
@@ -88,6 +83,18 @@ async function register(req, res) {
         });
     }
 }
+
+//function to Logout a user
+async function logout(req,res){
+    
+    //destroying the cookie, by setting its age to 0
+    res.cookie('secret', '', {
+        maxAge: 0,
+        overwrite: true,
+      });
+    res.redirect("/");
+}
+
 
 function protected(req, res) {
     console.log("reached protected");
