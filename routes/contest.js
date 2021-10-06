@@ -139,7 +139,8 @@ async function updateCumulative(req, res) {
                 if (newParticipant) {
                     await newParticipant.save();
                     console.log("New participant scores updated successfully!");
-                    return res.json("New Participant added successfully");
+                    // return res.json("New Participant added successfully");
+                    res.redirect("/participants")
                 } else {
                     console.log("Error saving the score of new Participant");
                 }
