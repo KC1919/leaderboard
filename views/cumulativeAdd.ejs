@@ -9,9 +9,9 @@
             <div id="field-container">
                 <div class="my-2">
                     <label class="mx-3" for="count">Participant-1</label>
-                    <label for="name">Name: </label><input id="fullname" type="text" />
-                    <label for="regNumber">RegNo: </label><input id="" type="text" />
-                    <label for="score">Points: </label><input id="" type="number" />
+                    <label for="name">Name: </label><input id="fullname" type="text" required />
+                    <label for="regNumber">RegNo: </label><input id="" type="text"  required/>
+                    <label for="score">Points: </label><input id="" type="number" required />
                 </div>
             </div>
             
@@ -71,9 +71,9 @@
             div.classList.add("my-2")
             let field = `
                 <label class="mx-3" for="count">Participant-${count + 1}</label>
-                <label for="name">Name: </label><input id="fullname" type="text" />
-                <label for="regNumber">RegNo: </label><input id="" type="text" />
-                <label for="score">Points: </label><input id="" type="number" />`
+                <label for="name">Name: </label><input id="fullname" type="text" required/>
+                <label for="regNumber">RegNo: </label><input id="" type="text" required/>
+                <label for="score">Points: </label><input id="" type="number" required/>`
             div.innerHTML = field;
             form.appendChild(div);
         }

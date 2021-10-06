@@ -109,6 +109,7 @@ async function updateCumulative(req, res) {
 
         // console.log(req.body);
 		
+        if(data.length>0){
 		//looping through all the participants to be added to the participants list
         await data.forEach(async (participant) => {
 			
@@ -149,6 +150,9 @@ async function updateCumulative(req, res) {
             }
         });
         return res.json("Participants added successfully!");
+    }else{
+        res.json("No participants to add!");
+    }
         
     } catch (error) {
         console.log("Internal server error", error);
