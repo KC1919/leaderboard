@@ -104,6 +104,7 @@ contestRouter.get("/addParticipant",verify, addParticipant).post("/updateCumulat
 async function updateCumulative(req, res) {
 
     try {
+        let count=0;
         const data = req.body;
 
         // console.log(req.body);
@@ -129,6 +130,7 @@ async function updateCumulative(req, res) {
                 });
 
                 if (update !== null) {
+                    count++;
                     console.log("Score updated successfully");
                     // return res.json("Scores updated successfully");
                 } else {
@@ -138,6 +140,7 @@ async function updateCumulative(req, res) {
                 const newParticipant = await Cumulative.create(participant);  //so we create a new participant, with the obtained score
                 if (newParticipant) {
                     await newParticipant.save();
+                    count++;
                     console.log("New participant scores updated successfully!");
                     // return res.json("New Participant added successfully");
                 } else {
@@ -145,7 +148,9 @@ async function updateCumulative(req, res) {
                 }
             }
         });
-        res.redirect("/participants");
+        if(count===data.length){
+            res.redirect("/participants");
+        }
         
     } catch (error) {
         console.log("Internal server error", error);
