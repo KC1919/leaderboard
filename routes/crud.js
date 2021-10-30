@@ -85,8 +85,8 @@ async function addParticipant(req, res) {
     try {
         
         // console.log("hello");
-        console.log(req.params.contestName);
-        console.log(req.body);
+        // console.log(req.params.contestName);
+        // console.log(req.body);
         //we check if the contest is present in the database or not
         const contest = await Contest.findOne({
             name: req.params.contestName

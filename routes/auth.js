@@ -30,9 +30,9 @@ async function login(req, res) {
                 const authToken = jwt.sign({userId:user._id}, process.env.JWT_KEY);
                 await res.cookie("secret", authToken, {
                     httpOnly: true,
-                    maxAge: 86400
+                    maxAge: 864000
                 });
-                res.redirect("/contest/participants");
+                return res.redirect("/contest/participants");
             } else {
                 return res.status(200).json({
                     message: "Invalid email or password"

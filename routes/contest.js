@@ -128,7 +128,7 @@ async function updateCumulative(req, res) {
                     regNumber: present.regNumber
                 }, {
                     score: newScore,
-                });
+                },{new:true});
 
                 if (update !== null) {
                     count++;
@@ -150,6 +150,8 @@ async function updateCumulative(req, res) {
             }
         });
         return res.json("Participants added successfully!");
+        // return res.redirect("/participants");
+
     }else{
         res.json("No participants to add!");
     }
