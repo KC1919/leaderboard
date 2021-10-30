@@ -32,7 +32,7 @@ async function login(req, res) {
                     httpOnly: true,
                     maxAge: 864000
                 });
-                return res.redirect("/contest/participants");
+                return res.json("Participants added successfully!");
             } else {
                 return res.status(200).json({
                     message: "Invalid email or password"
