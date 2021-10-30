@@ -9,7 +9,7 @@ const verify = require("../middlewares/verify");
 
 app.use(express.json());
 
-authRouter.post("/login", login).post("/register", register).get("/protected", verify, protected).get("/logout",verify,logout);
+authRouter.post("/login", login).post("/register", register).get("/protected", verify, protected).post("/logout",verify,logout);
 
 async function login(req, res) {
 
