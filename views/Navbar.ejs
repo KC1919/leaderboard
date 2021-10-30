@@ -1,27 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CRUD Api</title>
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
 
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
+  </head>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-        <div class="container-fluid">
-          <div style="display: flex;justify-content: space-evenly;" class="collapse navbar-collapse mt-2" id="navbarSupportedContent">
-            <a class="nav-link active" aria-current="page" role="banner" href="/contest/participants">Home</a>
-            <a class="btn btn-primary" role="button" href="/auth/logout" title="Click here to Logout">Logout</a>
-          </div>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <div
+          style="display: flex; justify-content: space-evenly"
+          class="collapse navbar-collapse mt-2"
+          id="navbarSupportedContent"
+        >
+          <a
+            class="nav-link active"
+            aria-current="page"
+            role="banner"
+            href="/contest/participants"
+            >Home</a
+          >
+          <button
+            class="btn btn-primary"
+            onclick="logout(this)"
+            title="Click here to Logout"
+          >
+            Logout
+          </button>
         </div>
-      </nav>
-</body>
+      </div>
+    </nav>
+
+    <script>
+      function logout(event) {
+        const response = await axios({ method: "POST", url: "/auth/logout" });
+      }
+    </script>
+  </body>
 </html>

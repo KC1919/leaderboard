@@ -88,11 +88,11 @@ async function register(req, res) {
 async function logout(req,res){
     
     //destroying the cookie, by setting its age to 0
-    res.cookie('secret', '', {
+    await res.cookie('secret', '', {
         maxAge: 0,
         overwrite: true,
       });
-    res.redirect("/");
+    return res.redirect("/");
 }
 
 
