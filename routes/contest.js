@@ -150,8 +150,6 @@ async function updateCumulative(req, res) {
             }
         });
         return res.json("Participants added successfully!");
-        // return res.redirect("/participants");
-
     }else{
         res.json("No participants to add!");
     }
