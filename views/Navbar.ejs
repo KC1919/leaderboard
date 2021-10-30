@@ -32,21 +32,16 @@
             href="/contest/participants"
             >Home</a
           >
-          <button
+          <a
+            href="/auth/logout"
             class="btn btn-primary"
-            onclick="logout(this)"
+            role="button"
             title="Click here to Logout"
           >
             Logout
-          </button>
+          </a>
         </div>
       </div>
     </nav>
-
-    <script>
-      async function logout(event) {
-        const response = await axios({ method: "POST", url: "/auth/logout" });
-      }
-    </script>
   </body>
 </html>
